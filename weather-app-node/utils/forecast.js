@@ -1,14 +1,19 @@
 const request = require('request');
 
 forecast = (latitude,longitude,callback) => {
-    const address = `http://api.weatherstack.com/current?access_key=<YOUR_API_HERE>&query=${latitude},${longitude}`
+    const address = `http://api.weatherstack.com/current?access_key=<YOUR_API_KEY>&query=${latitude},${longitude}`
 
     request({url:address,json:true},(error,response) => {
         if(error) { 
-            console.log("Check your internet");
+            callback('Unable to connect to internet')
         } else if(response.body.error){
-            console.log("Something wrong with coords");
-            
+            callback('You have entered a wrong place')
+        } else {
+            callback(undefined,{
+                location: response.body.location.name,
+                temperature : response.body.current.temperature,
+                feelslike : response.body.current.feelslike
+            })
         }
     })
 }

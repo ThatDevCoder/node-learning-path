@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "weather": "^1.0.4"
+    "weather": "^1.0.4",
+    "yargs": "^15.3.1"
   }
 }
