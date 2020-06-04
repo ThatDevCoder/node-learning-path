@@ -1,36 +1,66 @@
-const geocode = require('./utils/geocode.js');
-const forecast = require('./utils/forecast.js');
-const yargs = require('yargs');
+const yargv = require('yargs')
+const notes = require('./notes')
 
-// // let input = ""
-// yargs.command({
-//     command : 'place',
-//     describe: 'Enter a place to get temp',
-//     builder: {
-//         placename: {
-//             describe: 'placename pls',
-//             demandOption: true,
-//             type: 'string'
-//         }
-//     },
-//     handler(argv){
-//         input = argv.placename
-//     }
-// })
 
-geocode.geocode('mumbai',(error,data) => {
-    if(error){
-        console.log("Error ",error);
-    } else {
-        // console.log(data);
-        forecast.forecast(data.latitude,data.longitude,(error,data) => {
-            if(error){
-                console.log("Error ",error);
-            } else {
-                console.log("Location ",data.location);
-                console.log("Temperature ",data.temperature);
-                console.log("FellsLike ",data.feelslike);
-            }
-        })
+yargv.command({
+    command: 'add',
+    describe: 'add a new note',
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        },
+        body : {
+            describe: 'the body of the title you entered',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler(argv){
+         notes.addNotes(argv.title,argv.body )
     }
 })
+
+yargv.command({
+    command: 'remove',
+    describe: 'remove a new note',
+    builder: {
+        title:{
+            describe: 'enter title to be removed',
+            demandOption: true,
+            type: 'string'
+        }
+    }, 
+    handler(argv) {
+        notes.removeNotes
+        (argv.title)
+    }
+})
+
+yargv.command({
+    command: 'list',
+    describe: 'list all of the notes',
+    handler() {
+        notes.listNotes()
+    }
+})
+
+
+yargv.command({
+    command: 'read',
+    describe: 'read a new note',
+    builder: {
+        title : {
+            describe: 'enter title to be read',
+            demandOption: true,
+            type: 'string' 
+        }
+    },
+    handler(argv) {
+        notes.readNotes(argv.title)
+    }
+})
+
+yargv.parse()
+// console.log(yargv.argv);
